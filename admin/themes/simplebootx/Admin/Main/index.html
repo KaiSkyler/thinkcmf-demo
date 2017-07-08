@@ -1,0 +1,68 @@
+<admintpl file="header" />
+<style>
+.home_info li em {
+	float: left;
+	width: 120px;
+	font-style: normal;
+}
+li {
+	list-style: none;
+}
+</style>
+</head>
+<body>
+	<div class="wrap">
+		<div id="home_toptip"></div>
+		<h4 class="well">系统信息</h4>
+		<div class="home_info">
+			<ul>
+				<li style='font-size:16px;margin:8px;'>系统名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环保厂房后台管理系统</span></li>
+				<li style='font-size:16px;margin:8px;'>系统网址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://wwww.xxx.com</span></li>
+			</ul>
+		</div>
+
+		<h4 class="well">系统介绍</h4>
+		<div class="home_info" id="home_devteam">
+			<ul>
+				<li style='font-size:16px;margin:8px;'>业务范围&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户端系统包含五大模块：寻找厂房、出租厂房、环境法律、环评服务、环保支付宝</span></li>
+				<li style='font-size:16px;margin:8px;'>系统功能&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环保厂房后台管理系统在微信小程序用户端可上传厂房数据，后台可以对环保厂房数据进行审核、查看、分类、查询等功能</span></li>
+			</ul>
+		</div>
+
+		<h4 class="well">团队信息</h4>
+		<div class="home_info" id="home_devteam">
+			<ul>
+				<li style='font-size:16px;margin:8px;'>公司名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中山市XXX有限公司</span></li>
+				<li style='font-size:16px;margin:8px;'>核心人员&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小张、小李、XXX</span></li>
+				<li style='font-size:16px;margin:8px;'>团队目标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;打造全国第一环保厂房网</span></li>
+			</ul>
+		</div>
+
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<php>
+		$lang_set=defined('LANG_SET')?LANG_SET:'';
+		$thinkcmf_version=defined('THINKCMF_VERSION')?THINKCMF_VERSION:'';
+	</php>
+	<script>
+		//获取官方通知
+		$.getJSON("http://www.thinkcmf.com/service/sms_jsonp.php?lang={$lang_set}&v={$thinkcmf_version}&callback=?",
+		function(data) {
+			var tpl = '<li><em class="title"></em><span class="content"></span></li>';
+			var $thinkcmf_notices = $("#thinkcmf_notices");
+			$thinkcmf_notices.empty();
+			if (data.length > 0) {
+				$.each(data, function(i, n) {
+					var $tpl = $(tpl);
+					$(".title", $tpl).html(n.title);
+					$(".content", $tpl).html(n.content);
+					$thinkcmf_notices.append($tpl);
+				});
+			} else {
+				$thinkcmf_notices.append("<li>^_^,{:L('NO_NOTICE')}~~</li>");
+			}
+
+		});
+	</script>
+</body>
+</html>

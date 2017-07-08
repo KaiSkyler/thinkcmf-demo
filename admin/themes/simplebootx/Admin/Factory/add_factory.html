@@ -1,0 +1,392 @@
+<admintpl file="header" />
+<style>
+.aixuexi{
+	width:200px;
+	height:200px;
+	border:px solid black;
+}
+.aixuexi img{width:100%;height:100%;}
+</style>
+<script src="__PUBLIC__/layer/jquery.js?v=1.83.min"></script>
+<script src="__PUBLIC__/layer/layer.min.js"></script>
+
+<script src="__PUBLIC__/layer/layer.js"></script>
+<script src="__PUBLIC__/layer/mobile/need/layer.css"></script> 
+
+<style type="text/css">
+
+
+	/* 包含图片的div */
+	.img_div{min-height: 200px; min-width: 100px;}
+	/* 图片加载样式 */
+	.isImg{
+		width: 200px; 
+		height: 200px; 
+		position: relative; 
+		float: left; 
+		margin-left: 10px;
+		margin-bottom: 10px;
+	}
+	/* 删除图片的按钮样式 */
+	.removeBtn{
+		position: absolute;
+		top: 0; right: 0;
+		z-index: 11; 
+		border: 0px; 
+		border-radius: 50px; 
+		background: red; 
+		width: 22px; 
+		height: 22px; 
+		color: white;
+	}
+
+	
+	/* 点击上传样式  */
+    .z_file {
+        width: 200px;
+        height: 200px;
+        background: url(public/images/z_add.png) no-repeat;
+        background-size: 100% 100%;
+        float: left;
+        margin-left: 10px;
+    }
+    
+    /* 将原来的样式隐藏 */
+    .z_file input::-webkit-file-upload-button {
+        width: 200px;
+        height: 200px;
+        border: none;
+        position: absolute;
+        outline: 0;
+        opacity: 0;
+    }
+    
+</style>
+
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Factory/add_factory')}">添加房源</a></li>
+		</ul>
+
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Product/editnewhouse')}"> 
+			<p style="font-size:18px;">基本信息</p>
+			<table class="table table-hover table-bordered" style="width:580px;">
+				<thead>
+					<tr>
+						<td width="120" style="font-size:15px">厂房名称</td>
+						<td style="font-size:14px"><input style="margin-bottom:0px; height:20px;color:black;;" type="text" name="fac_name" value="" id='fac_name'>&nbsp;<span style="color:red;">*</span></td>
+					</tr>
+
+					<tr >
+						<td width="120" style="font-size:15px">厂房面积</td>
+						<td >
+							<select name="fac_area"  id="fac_area" style="width:218px;height:36px;">
+							<volist name='areaList' id='vo'>
+								<option value="{$vo.area}">{$vo.area}</option>
+							</volist> 
+							</select>&nbsp;
+						    <span style="color:red;">*</span>
+						</td>
+					</tr>
+
+					<!--<tr >
+						<td width="120" style="font-size:15px">具体面积</td>
+						<td style="font-size:14px"><input style="margin-bottom:0px; height:20px;color:black;;" type="text" name="area" value="" id='area'>&nbsp;<span style="color:red;">*</span>&nbsp;<span>m²</span></td>
+					</tr> -->
+
+					<tr >
+						<td width="120" style="font-size:15px">厂房地址</td>
+						<td >
+						<select name="address"  id="address" style="width:100px;height:36px;">
+							<volist name='addressList' id='vo'>
+								<option value="{$vo.address}">{$vo.address}</option>
+							</volist> 
+						</select>&nbsp;
+						<input style="margin-bottom:0px; height:20px;width:250px;color:black;;" type="text" name="xx_address" value="" id='xx_address' placeholder="请填写详细地址">&nbsp;
+						<span style="color:red;">*</span>
+						</td>
+					</tr>
+
+
+					<tr >
+						<td width="150" style="font-size:15px">厂房用途</td>
+						<td >
+							<select name="fac_use"  id="fac_use" style="width:218px;height:36px;">
+							<volist name='industryList' id='vo'>
+								<option value="{$vo.industry}">{$vo.industry}</option>
+							</volist> 
+							</select>&nbsp;
+						    <span style="color:red;">*</span>
+						</td>
+					</tr>
+
+					<tr >
+						<td width="120" style="font-size:15px">出租时间</td>
+						<td ><input type="text" name="lease_time" id="lease_time" class="js-datetime" value="{$formget.start_time|default=''}" style="width: 205px;" autocomplete="off">&nbsp;<span style="color:red;">*</span></td >
+					</tr>
+
+
+					<tr >
+						<td width="150" style="font-size:15px">联系人</td>
+						<td ><input style="margin-bottom:0px; height:20px;color:black;" type="text" name="name" value="" id='name'>&nbsp;<span style="color:red;">*</span></td>
+					</tr>
+					<tr >
+						<td width="150" style="font-size:15px">联系电话</td>
+						<td ><input style="margin-bottom:0px; height:20px;color:black;" type="text" name="phone" value="" id='phone'>&nbsp;<span style="color:red;">*</span></td>
+					</tr>
+					
+				</thead>
+			</table>
+
+
+		</form>
+        <p style="font-size:18px;margin:20px 0px 20px 0px;" >厂房图片（最多上传5张）</p>
+		<center>
+		<!--图片加载的地方( class="img_div" )-->
+		<div class="img_div">
+			<!--上传样式一-->
+			<div class="z_file">
+	        	<input type="file" name="myFile" id="myFile" multiple="multiple" />
+	    	</div>
+		</div>
+		</center> 
+
+		<div class="form-actions" >
+			<button style="margin-left:550px" type="button" class="btn btn-primary js-ajax-submit" onclick="picture()">提交</button>
+			<a class="btn" href="javascript:history.back(-1);">返回</a>
+		</div>
+		
+	</div>
+	<script type="text/javascript">
+
+	//记录上传的图片数
+	var count = 0;
+	//存放上传的图片数组
+	var images = [];
+	//给上传的图片一个标识，用于删除
+	var pic_index=0;
+
+	$(function() {
+
+		//动态加载图片的html
+		var img_html;
+		//点击上传时触发的事件
+		$("#myFile").change(function() {
+
+			//获取加载的样式div，将每次加载的图片div放在它前面
+			var z_file = $(".z_file");
+
+			//循环每次上传的图片
+			for(var i = 0; i < this.files.length; i++) {
+				
+				//上传图片数量最多5张
+				if(count>=5){
+					//图片数量超过提示，并隐藏添加的div
+					$(".shade").fadeIn(500);
+					$(".text_span").text("最多上传5张照片");
+					z_file.hide();
+					return false;
+				}else{
+
+					z_file.show();
+				}
+
+				//获取上传图片的名称
+				var filepath = this.files[i].name;
+				//获取后缀名.的位置标号
+				var extStart = filepath.lastIndexOf(".");
+				//截取.位置到最后的内容，并转为大写
+				var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+
+				//判断上传图片的类型
+				if(ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+					//类型错误提示，设置5毫秒是为了加载完图片再提示错误
+					$(".shade").fadeIn(5);
+					$(".text_span").text("图片限于bmp,png,gif,jpeg,jpg格式");
+					//同事选择多张上传，若中间有图片格式错误，则忽视，继续加载后面图片
+					continue;
+				} else {
+
+					//若提交的图片存在，则转为base64格式
+					if(this.files[i]){
+						
+	            	   	//回调函数，js图片裁剪后转为base64后，加载预览
+  						compress(this.files[i],function(data){
+
+  							//动态加载预览图片
+                            img_html = "<div class='isImg'><img src='" + data + "' onclick='javascript:lookBigImg(this)' style='height: 100%; width: 100%;' /><button class='removeBtn' onclick='javascript:removeImg(this)'>x</button></div>";
+                            //每次都在点击样式前加载
+							z_file.before(img_html);
+							//将裁剪后的base64格式图片存到数组里
+							images[pic_index] = data;
+							pic_index++;
+							console.log(images);
+							
+                        })
+                        //记录图片数
+                        count++;
+                        if(count>=5){
+                        	z_file.hide();
+                        }
+            		}
+
+				}
+			}
+
+		
+			//鉴定每个图片大小总和
+			var file_size = 0;
+			var all_size = 0;
+			for(j = 0; j < this.files.length; j++) {
+				file_size = this.files[j].size;
+				all_size = all_size + this.files[j].size;
+				var size = all_size / 1024;
+				if(size > 500) {
+					$(".shade").fadeIn(500);
+					$(".text_span").text("上传的图片大小不能超过500k！");
+					this.value = "";
+					$(".img_div").html("");
+					return false;
+				}
+			}
+			
+			return true;
+		});
+
+	});
+
+	//在js端，将上传的裁剪并转为base64
+    function compress(event, callback){
+        var file = event;
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+
+            var image = $('<img/>');
+            image.on('load', function () {
+                var square = 700;
+                var canvas = document.createElement('canvas');
+
+                canvas.width = square;
+                canvas.height = square;
+
+                var context = canvas.getContext('2d');
+                context.clearRect(0, 0, square, square);
+                var imageWidth = square;
+                var imageHeight = square;
+                var offsetX = 0;
+                var offsetY = 0;
+
+/*                if (this.width > this.height) {
+                    imageWidth = Math.round(square * this.width / this.height);
+                    imageHeight = square;
+                    offsetX = - Math.round((imageWidth - square) / 2);
+                } else {
+                    imageHeight = Math.round(square * this.height / this.width);
+                    imageWidth = square;
+                    offsetY = - Math.round((imageHeight - square) / 2);
+                }*/
+
+                context.drawImage(this, offsetX, offsetY, imageWidth, imageHeight);
+                var data = canvas.toDataURL('image/jpeg');
+                callback(data);
+            });
+
+            image.attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+	
+	//描述：上传图片附带删除 再此地方可以加上一个ajax进行提交到后台进行删除
+	
+	function removeImg(r){
+		//获取当前标签并找到其父标签，再找到<img>标签的src属性
+		var s=$(r).parent().find('img').attr('src');
+		for(var j=0;j<images.length;j++){
+
+			if(images[j]==s){
+				images[j]='';
+				count--;
+				//移除整个图片div
+				$(r).parent().remove();
+				console.log(images);
+				//但图片数量<5时，显示添加的div
+				if(count<5){
+					$(".z_file").show();
+				}
+				return false;
+			}
+		}
+	}
+
+
+	//点击提交
+	function picture(){
+		//将图片数组进行过滤，去掉空值，得到要上传的图片数组
+		var pic_images=[];
+		var s=0;
+		for(var j=0;j<images.length;j++){
+
+			if(images[j]==""){
+				continue;
+			}else{
+
+				pic_images[s]=images[j];
+				s++
+			}
+		}
+
+		//基本表数据
+		var fac_name=$('#fac_name').val();
+		var fac_area=$('#fac_area').val();
+		//var area=$('#area').val();
+
+		var address=$('#address').val();
+		var xx_address=$('#xx_address').val();
+
+		var fac_use=$('#fac_use').val();
+		var lease_time=$('#lease_time').val();
+		var name=$('#name').val();
+		var phone=$('#phone').val();
+
+
+		if(!fac_name){
+			layer.msg('厂房名称不能为空');
+		}else if(!fac_area){
+			layer.msg('面积区间不能为空');
+		}else if(!address || !xx_address ){
+			layer.msg('请填写完整地址信息');
+		}else if(!fac_use){
+			layer.msg('厂房用途不能为空');
+		}else if(!lease_time){
+			layer.msg('出租时间不能为空');
+		}else if(!name){
+			layer.msg('联系人不能为空');
+		}else if(!phone){
+			layer.msg('手机号码不能为空');
+		}else if(!(/^1[34578]\d{9}$/.test(phone))){
+			layer.msg('请填写正确的手机号码');
+		}else{
+			$.ajax({
+			    type:'POST',
+			    url:"{:U('Factory/add_factory')}",
+			    data:{fac_name:fac_name,fac_area:fac_area,address:address,xx_address:xx_address,fac_use:fac_use,lease_time:lease_time,name:name,phone:phone,images:pic_images},
+			    success:function(data){
+			    	if(data==1){
+			    		alert('提交成功！');
+			    		window.location.href="{:U('Factory/audit')}";
+			    	}
+					
+			    }
+		    });
+		}
+ 		
+	}
+</script>
+<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

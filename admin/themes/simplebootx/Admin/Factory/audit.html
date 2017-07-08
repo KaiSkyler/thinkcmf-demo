@@ -1,0 +1,97 @@
+<admintpl file="header" />
+<style>
+.aixuexi{
+	width:50px;
+	height:50px;
+	border:px solid black;
+}
+.aixuexi img{width:100%;height:100%;}
+</style>
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Factory/audit')}">厂房列表</a></li>
+		</ul>
+
+		<form class="well form-search" method="POST" action="{:U('Factory/audit_sel')}">
+			地区：
+			<select name="address" id="address" style="width:120px;" onchange="change()">
+				<option value='0'>不限</option>
+				<volist name='addressList' id='vo'>
+				<if condition="$select_address eq $vo['address']">
+					<option value="{$vo.address}" selected>{$vo.address}</option>
+					<else/><option value="{$vo.address}">{$vo.address}</option>
+				</if>
+				</volist> 
+			</select> &nbsp;&nbsp;
+
+			行业：
+			<select name="industry" id="industry" style="width:120px;" onchange="change()">
+				<option value='0'>不限</option>
+				<volist name='industryList' id='vo'>
+				<if condition="$select_industry eq $vo['industry']">
+					<option value="{$vo.industry}" selected>{$vo.industry}</option>
+					<else/><option value="{$vo.industry}">{$vo.industry}</option>
+				</if>
+				</volist> 
+			</select> &nbsp;&nbsp;
+
+			面积：
+			<select name="fac_area" id="fac_area" style="width:135px;" onchange="change()">
+				<option value='0'>不限</option>
+				<volist name='areaList' id='vo'>
+				<if condition="$select_area eq $vo['area']">
+					<option value="{$vo.area}" selected>{$vo.area}</option>
+					<else/><option value="{$vo.area}">{$vo.area}</option>
+				</if>
+				</volist> 
+			</select> &nbsp;&nbsp;
+
+			关键字：
+			<input type="text" name="keyword" style="width: 200px;" value="{$select_keyword|default=''}" placeholder="请输入厂主姓名/电话">&nbsp;&nbsp;
+
+			<input type="submit" class="btn btn-primary" id='search' value="搜索" />
+			<a class="btn btn-danger" href="{:U('Factory/audit')}">清空</a> 
+		</form>
+
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="30" style="font-size:14px">编号</th>
+					<th width="210" style="font-size:14px">厂房名称</th>
+					<th width="100" style="font-size:14px">厂房面积</th>
+					<th width="210" style="font-size:14px">厂房地址</th>
+					<th width="130" style="font-size:14px">厂房用途</th>
+					<th width="120" style="font-size:14px">出租时间</th>
+					<th width="90" style="font-size:14px">联系人</th>
+					<th width="100" style="font-size:14px">联系电话</th>
+					<th width="100" style="font-size:14px">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name='auditList'  id='data'>
+				<tr id="del{$data.id}">
+					<td style="font-size:14px">{$data.sort_id}</td>
+					<td style="font-size:14px">{$data.house_name}</td>
+					<td style="font-size:14px">{$data.house_mianji}</td>
+					<td style="font-size:14px">{$data.house_address}</td>
+					<td style="font-size:14px">{$data.house_type}</td>
+					<td style="font-size:14px">{$data.house_create}</td>
+					<td style="font-size:14px">{$data.house_user}</td>
+					<td style="font-size:14px">{$data.house_phone}</td>
+					<td style="font-size:14px"><a href="{:U('Factory/detail',array('id'=>$data['id']))}">审核 </a> </td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		function change(){
+			$("#search").trigger("click");
+		}
+	</script>
+</body>
+</html>
